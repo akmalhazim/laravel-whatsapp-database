@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WhatsApp | By Akmal Hazim</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/style.css">
+
+    <style>
+        body {
+            background-color: #3CB371;
+        }
+
+        .container {
+            padding: 15px;
+        }
+
+        .contact {
+            padding: 15px;
+            margin: 0;
+            /*padding-top:10px;*/
+        }
+
+        .bodyOfForm {
+            background-color: #fff;
+            padding: 25px;
+            padding-bottom: 35px;
+            margin-top: 50px;
+            -webkit-box-shadow: 0px 3px 49px -13px rgba(0,0,0,0.75);
+            -moz-box-shadow: 0px 3px 49px -13px rgba(0,0,0,0.75);
+            box-shadow: 0px 3px 49px -13px rgba(0,0,0,0.75);
+        }
+
+        .formInput {
+            padding: 15px;
+        }
+
+
+        .bodyContainer {
+            margin-top: 50rem;
+        }
+
+        .form-control {
+            margin-bottom: 15px;
+        }
+
+        .contribute {
+            background-color: #333;
+            padding: 7px;
+        }
+
+        .contribute > p {
+            color: #fff;
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+<div class="contribute">
+    <a href="https://github.com/you"><a href="https://github.com/akmalhazim24/whatsapp"><img style="z-index: 100; position: absolute; top: 0; right: 0; border: 0;" src="https://s3.amazonaws.com/github/ribbons/forkme_right_darkblue_121621.png" alt="Fork me on GitHub"></a>
+        <p class="text-center">Made with <img style="margin: 4.5px 0; height: 15px; width: 15px;" src="img/love.png"> by <a href="https://www.facebook.com/akmalhazim.me">Akmal Hazim</a></p>
+</div>
+
+
+<div id="app" class="container d-flex justify-content-center">
+    <div class="bodyOfForm col-lg-7">
+        {{--<div v-if="errors.length > 0">--}}
+            {{--<div v-for="error in errors" class="alert alert-danger" role="alert">--}}
+                {{--{{ error }}--}}
+            {{--</div>--}}
+        {{--</div>--}}
+        <h1 class="contact">WhatsApp:</h1>
+        <div class="formInput">
+            <form method="post" action="/{{ $site }}">
+                <input name="name"  class="form-control form-control-lg" type="text" placeholder="Name">
+                <input name="phone_number"  class="form-control form-control-lg" type="tel" placeholder="Phone Number">
+                <input name="email"  class="form-control form-control-lg" type="email" placeholder="Email">
+                @csrf
+                @if(!isset($messages))
+                <input  class="form-control form-control-lg" type="text" placeholder="Message">
+                @endif
+                @if(isset($messages))
+                <select name="message" class="custom-select" id="inputGroupSelect01">
+                    @foreach($messages as $message)
+                        <option value="{{ $message->message }}">{{ $message->message }}</option>
+                    @endforeach
+                </select>
+                @endif
+                <button class="btn btn-lg btn-success" type="submit">Ping!</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+
+<script src="https://cdn.jsdelivr.net/npm/vue@2.5.16/dist/vue.min.js"></script>
+
+<script>
+    window.app = new Vue({
+        el: "#app",
+        data: {
+            message: '',
+            phone: '',
+            newPhone:'',
+            errors: []
+        },
+        methods: {
+            checkInput() {
+                this.errors = [];
+                const phoneno = /^\d{10}$|^\d{11}$/;
+                // const phoneno11 = /^\d{11}$/;
+                if(!this.phone.match(phoneno)) {
+                    this.errors.push("Your phone number is incorrect. Please take the following as an example: 0109410211 without +6.");
+
+                }
+                if(!this.message.length) {
+                    this.errors.push("Please type in some message.");
+                }
+                else if(this.message.length > 255) {
+                    this.errors.push("Whoops, it looks like your message is too long. Please try to shorten it.");
+                }
+
+                if(!this.errors.length){
+                    return true;
+                }
+            },
+            redirect() {
+
+                if(this.checkInput()) {
+                    this.newPhone = '6'+this.phone;
+                    document.location.href = 'https://wa.me/'+this.newPhone+'?text='+this.message;
+                }
+
+            }
+        }
+    })
+</script>
+</body>
+</html>

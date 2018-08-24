@@ -18,3 +18,12 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/dashboard/create', 'DashboardController@create')->middleware('auth');
+Route::post('/dashboard/', 'DashboardController@store')->name('newSite')->middleware('auth');
+Route::get('/dashboard/{site_id}', 'DashboardController@show')->middleware('auth');
+Route::get('/dashboard/{site_id}/messages', 'DashboardController@messages')->middleware('auth');
+Route::post('/dashboard/{site_id}/messages', 'DashboardController@storeMessages')->middleware('auth');
+Route::delete('/dashboard/{message_id}/messages', 'DashboardController@deleteMessages')->middleware('auth');
+
+Route::get('{site}', 'DashboardController@welcomeGet');
+Route::post('{site}', 'DashboardController@welcome');
